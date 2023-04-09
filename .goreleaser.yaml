@@ -22,8 +22,6 @@ checksum:
   name_template: "checksums.txt"
 snapshot:
   name_template: "{{ incpatch .Version }}-next"
-source:
-  enabled: true
 changelog:
   sort: asc
 dockers:
