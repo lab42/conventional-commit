@@ -12,4 +12,4 @@ jobs:
         with:
           fetch-depth: 0
       - name: Validate PR title
-        uses: lab42/conventional-commit@v0.0.1
+        uses: lab42/conventional-commit@main
