@@ -3,4 +3,4 @@ name: "Conventional Commit"
 description: "Validate PR title according to conventional commit spec"
 runs:
   using: "docker"
-  image: "Dockerfile"
+  image: "lab42/conventional-commit"
