@@ -6,5 +6,4 @@ FROM scratch as production
 COPY --from=setup /etc/passwd /etc/passwd
 COPY conventional-commit /conventional-commit
 USER appuser
-EXPOSE 123456
 ENTRYPOINT ["/conventional-commit"]
