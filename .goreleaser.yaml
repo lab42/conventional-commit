@@ -32,6 +32,7 @@ dockers:
       - ghcr.io/lab42/{{.ProjectName}}:v{{.Version}}-amd64
       - ghcr.io/lab42/{{.ProjectName}}:latest-amd64
     build_flag_templates:
+      - "--squash"
       - "--platform=linux/amd64"
       - "--label=org.opencontainers.image.created={{.Date}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
@@ -45,6 +46,7 @@ dockers:
       - ghcr.io/lab42/{{.ProjectName}}:v{{.Version}}-armv6
       - ghcr.io/lab42/{{.ProjectName}}:latest-armv6
     build_flag_templates:
+      - "--squash"
       - "--platform=linux/arm/v6"
       - "--label=org.opencontainers.image.created={{.Date}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
@@ -58,6 +60,7 @@ dockers:
       - ghcr.io/lab42/{{.ProjectName}}:v{{.Version}}-armv7
       - ghcr.io/lab42/{{.ProjectName}}:latest-armv7
     build_flag_templates:
+      - "--squash"
       - "--platform=linux/arm/v7"
       - "--label=org.opencontainers.image.created={{.Date}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
@@ -70,6 +73,7 @@ dockers:
       - ghcr.io/lab42/{{.ProjectName}}:v{{.Version}}-arm64v8
       - ghcr.io/lab42/{{.ProjectName}}:latest-arm64v8
     build_flag_templates:
+      - "--squash"
       - "--platform=linux/arm64/v8"
       - "--label=org.opencontainers.image.created={{.Date}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
