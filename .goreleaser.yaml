@@ -1,4 +1,4 @@
-project_name: conventional commit
+project_name: conventional-commit
 builds:
   - hooks:
       post:
