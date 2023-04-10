@@ -8,7 +8,7 @@ description: "Validate PR title according to conventional commit spec"
 runs:
   using: "composite"
   steps:
-    - run: install.sh
+    - run: bash install.sh
       shell: bash
     - run: conventional-commit
       shell: bash
