@@ -28,7 +28,7 @@ var rootCmd = &cobra.Command{
 
 		owner, repo := meta[0], meta[1]
 
-		res := regexp.MustCompile(`/refs\/pull\/(\d+)\/merge/`).FindStringSubmatch(os.Getenv("GITHUB_REF"))
+		res := regexp.MustCompile(`refs\/pull\/(\d+)\/merge/`).FindStringSubmatch(os.Getenv("GITHUB_REF"))
 		if len(res) < 1 {
 			os.Exit(1)
 		}
