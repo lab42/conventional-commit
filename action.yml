@@ -41,6 +41,6 @@ runs:
         curl -fsSLo $TMP/${PROJECT}.tar.gz https://github.com/lab42/${PROJECT}/releases/download/v${VERSION}/${PROJECT}_${VERSION}_${OS}_${ARCH}.tar.gz
         tar -xf $TMP/${PROJECT}.tar.gz -C /usr/local/bin ${PROJECT}
         rm -rf $TMP
-      shell: bash
+      shell: sh
     - run: conventional-commit
-      shell: bash
+      shell: sh
