@@ -11,5 +11,9 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: check env
+        run: |
+          echo $GITHUV_REF
+          echo $GITHUB_REPOSITORY
       - name: Validate PR title
         uses: lab42/conventional-commit@main
