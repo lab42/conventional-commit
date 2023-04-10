@@ -9,5 +9,3 @@ jobs:
     steps:
       - name: Validate PR title
         uses: lab42/conventional-commit@main
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
