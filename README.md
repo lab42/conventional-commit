@@ -43,5 +43,5 @@ jobs:
         env:
             GITHUB_TOKEN: ${{ secrets.TOKEN }}
             TYPES: feat|fix
-            DESCRIPTIOM: \[([\w])-(\d{1,4})\] ([\w ]+) # Example for requiring Jira issue number before description.
+            DESCRIPTION: \[([\w])-(\d{1,4})\] ([\w ]+) # Example for requiring Jira issue number before description.
 ```
