@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/google/go-github/github"
+	"github.com/lab42/conventional-commit/pkg/logger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"golang.org/x/oauth2"
@@ -20,6 +21,9 @@ var rootCmd = &cobra.Command{
 	Use:   "conventional-commit",
 	Short: "A brief description of your application",
 	Run: func(cmd *cobra.Command, args []string) {
+
+		logger.Log.Info("Types configuration:       " + viper.GetString("TYPES"))
+		logger.Log.Info("Description configuration: " + viper.GetString("DESCRIPTION"))
 
 		meta := strings.Split(os.Getenv("GITHUB_REPOSITORY"), "/")
 		owner, repo := meta[0], meta[1]
@@ -48,10 +52,11 @@ var rootCmd = &cobra.Command{
 				viper.GetString("DESCRIPTION"),
 			)).
 			Match([]byte(githubPr.GetTitle())) {
-			fmt.Println("passed")
+			logger.Log.Info("Passed")
 			os.Exit(0)
 		}
-		fmt.Println("failed")
+
+		logger.Log.Info("Failed")
 		os.Exit(1)
 	},
 }

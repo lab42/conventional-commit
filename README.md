@@ -1,32 +1,47 @@
 # Conventional commit docker action
 
-This action validates the PR title and checks if it is fomrmulated according to the spec.
+This action validates the PR title and checks if it is formulated according to the conventional commit spec.
 
-## Inputs
-
-No inputs are needed.
-
-## Outputs
-
-No ouputs are provided.
-
-## Example usage
-
-### Basic usage
+## Basic usage
 
 ```
-name: Validate PR title
-uses: lab42/conventional-commit
+name: Pull request
+
+on:
+  pull_request: {}
+
+jobs:
+  Validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR title
+        uses: lab42/conventional-commit@main
+        env:
+            GITHUB_TOKEN: ${{ secrets.TOKEN }}
+
 ```
 
-### Configuring types and description validation. 
+## Configuring types and description validation. 
 
-The following example uses regular expressions to valudate the types and description. Adjust them according to your need as needed.
+The following example uses regular expressions to valudate the types and description. Adjust them according to your needs.
+
+* Default types      : build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test
+* Defautl description: ([\w ]+)
 
 ```
-name: Validate PR title
-uses: lab42/conventional-commit
-env:
-    TYPES: feat|fix # Default: build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test
-    DESCRIPTIOM: \[[\d{1,4}]\] ([\w ]+) # Defautl: ([\w ]+)
+name: Pull request
+
+on:
+  pull_request: {}
+
+jobs:
+  Validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR title
+        uses: lab42/conventional-commit@main
+        env:
+            GITHUB_TOKEN: ${{ secrets.TOKEN }}
+            TYPES: feat|fix
+            DESCRIPTIOM: \[([\w])-(\d{1,4})\] ([\w ]+) # Example for requiring Jira issue number before description.
 ```

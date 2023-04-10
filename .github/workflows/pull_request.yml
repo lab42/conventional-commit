@@ -1,16 +1,12 @@
-name: Check PR title
+name: Pull request
 
 on:
   pull_request: {}
 
 jobs:
-  test:
+  Validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
       - name: Validate PR title
         uses: lab42/conventional-commit@main
         env:
