@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Validate PR title
         uses: lab42/conventional-commit@main
+        env:
+            GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
 ```
 
@@ -39,6 +41,7 @@ jobs:
       - name: Validate PR title
         uses: lab42/conventional-commit@main
         env:
+            GITHUB_TOKEN: ${{ secrets.TOKEN }}
             TYPES: feat|fix
             DESCRIPTIOM: \[([\w])-(\d{1,4})\] ([\w ]+) # Example for requiring Jira issue number before description.
 ```
