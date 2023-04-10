@@ -22,17 +22,9 @@ var rootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		meta := strings.Split(os.Getenv("GITHUB_REPOSITORY"), "/")
-		if len(meta) < 1 {
-			os.Exit(1)
-		}
-
 		owner, repo := meta[0], meta[1]
 
-		res := regexp.MustCompile(`/refs\/pull\/(\d+)\/merge/`).FindStringSubmatch(os.Getenv("GITHUB_REF"))
-		if len(res) < 1 {
-			os.Exit(1)
-		}
-
+		res := regexp.MustCompile(`refs\/pull\/(\d+)\/merge`).FindStringSubmatch(os.Getenv("GITHUB_REF"))
 		pr, err := strconv.Atoi(res[1])
 		cobra.CheckErr(err)
 
@@ -56,9 +48,10 @@ var rootCmd = &cobra.Command{
 				viper.GetString("DESCRIPTION"),
 			)).
 			Match([]byte(githubPr.GetTitle())) {
+			fmt.Println("passed")
 			os.Exit(0)
 		}
-
+		fmt.Println("failed")
 		os.Exit(1)
 	},
 }
