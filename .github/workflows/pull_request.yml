@@ -1,0 +1,11 @@
+name: Pull request
+
+on:
+  pull_request: {}
+
+jobs:
+  Validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR title
+        uses: lab42/conventional-commit@main
