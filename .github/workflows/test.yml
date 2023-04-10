@@ -58,6 +58,9 @@ jobs:
 
       - name: Create release
         if: github.ref == 'refs/heads/main'
-        run: gh release create $(svu next)
+        run: |
+          if [[ $(svu) != $(svu next) ]]; then
+            gh release create $(svu next)
+          fi
         env:
           GH_TOKEN: ${{ secrets.TOKEN }}
