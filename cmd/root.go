@@ -22,7 +22,7 @@ var rootCmd = &cobra.Command{
 	Use:   "conventional-commit",
 	Short: "A brief description of your application",
 	Run: func(cmd *cobra.Command, args []string) {
-		Log.Info(`
+		fmt.Printf(`
 Configuration
 
 Allowed Types
@@ -30,7 +30,7 @@ Allowed Types
 Description Regexp 
 \t%s
 Require scope 
-\t%s
+\t%t
 Scope Regexp 
 \t%s`,
 			strings.ReplaceAll(os.Getenv("INPUT_ALLOWED_TYPES"), "\n", "\n\t"),

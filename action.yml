@@ -18,7 +18,7 @@ inputs:
       test
   description_regexp:
     description: Regular expression to validate description
-    default: ([\w ]+)
+    default: (.+)
   require_scope:
     description: Make scope requires (boolean)
     default: "false"
