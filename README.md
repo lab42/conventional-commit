@@ -2,6 +2,8 @@
 
 This action validates the PR title and checks if it is formulated according to the conventional commit spec.
 
+
+
 ## usage
 
 ```
