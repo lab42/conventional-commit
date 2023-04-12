@@ -1,6 +1,30 @@
 # action.yml
 name: "Conventional Commit"
 description: "Validate PR title according to conventional commit spec"
+inputs:
+  allowed_types:
+    description: Allowed commit types
+    default: |
+      build
+      chore
+      ci
+      docs
+      feat
+      fix
+      perf
+      refactor
+      revert
+      style
+      test
+  description_regexp:
+    description: Regular expression to validate description
+    default: ([\w ]+)
+  require_scope:
+    description: Make scope requires (boolean)
+    default: "false"
+  scope_regexp:
+    description: Regular expression to validate scope. Only used when require_scope is true or when scope is provided.
+    default: (\w+)
 runs:
   using: "docker"
   image: "docker://ghcr.io/lab42/conventional-commit:latest"

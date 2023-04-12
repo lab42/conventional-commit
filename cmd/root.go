@@ -9,21 +9,35 @@ import (
 	"strings"
 
 	"github.com/google/go-github/github"
-	"github.com/lab42/conventional-commit/pkg/logger"
+	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"golang.org/x/exp/slog"
 	"golang.org/x/oauth2"
 )
 
-var cfgFile string
+var Log *slog.Logger
 
 var rootCmd = &cobra.Command{
 	Use:   "conventional-commit",
 	Short: "A brief description of your application",
 	Run: func(cmd *cobra.Command, args []string) {
+		Log.Info(`
+Configuration
 
-		logger.Log.Info("Types configuration:       " + viper.GetString("TYPES"))
-		logger.Log.Info("Description configuration: " + viper.GetString("DESCRIPTION"))
+Allowed Types
+%s
+Description Regexp 
+\t%s
+Require scope 
+\t%s
+Scope Regexp 
+\t%s`,
+			strings.ReplaceAll(os.Getenv("INPUT_ALLOWED_TYPES"), "\n", "\n\t"),
+			os.Getenv("INPUT_DESCRIPTION_REGEXP"),
+			viper.GetBool("INPUT_REQUIRE_SCOPE"),
+			os.Getenv("INPUT_SCOPE_REGEXP"),
+		)
 
 		meta := strings.Split(os.Getenv("GITHUB_REPOSITORY"), "/")
 		owner, repo := meta[0], meta[1]
@@ -45,19 +59,51 @@ var rootCmd = &cobra.Command{
 		githubPr, _, err := client.PullRequests.Get(ctx, owner, repo, pr)
 		cobra.CheckErr(err)
 
-		if regexp.MustCompile(
+		re := regexp.MustCompile(
 			fmt.Sprintf(
-				`^(%s){1}(\([\w\-\.]+\))?(!)?: %s`,
-				viper.GetString("TYPES"),
-				viper.GetString("DESCRIPTION"),
-			)).
-			Match([]byte(githubPr.GetTitle())) {
-			logger.Log.Info("Passed")
-			os.Exit(0)
+				`^(%s){1}(\([\w\-\.]+\))?(!)?: (.+)`,
+				strings.Join(
+					strings.Split(
+						strings.TrimRight(
+							os.Getenv("INPUT_ALLOWED_TYPES"),
+							"\n",
+						),
+						"\n",
+					),
+					"|",
+				),
+			),
+		)
+
+		if !re.Match([]byte(githubPr.GetTitle())) {
+			Log.Info("type must be one of:\n%s", os.Getenv("INPUT_ALLOWED_TYPES"))
+			os.Exit(100)
 		}
 
-		logger.Log.Info("Failed")
-		os.Exit(1)
+		subMatches := re.FindStringSubmatch(githubPr.GetTitle())
+		prScope := subMatches[1]
+		prDescription := subMatches[3]
+
+		if cast.ToBool(os.Getenv("INPUT_REQUIRE_SCOPE")) {
+			if len(prScope) < 3 {
+				Log.Info("scope is mandatory")
+				os.Exit(101)
+			}
+		}
+
+		if len(prScope) > 2 {
+			if !regexp.MustCompile(os.Getenv("INPUT_SCOPE_REGEXP")).Match(
+				[]byte(strings.TrimLeft(strings.TrimRight(prScope, ")"), "(")),
+			) {
+				Log.Info("scope validation failed")
+				os.Exit(102)
+			}
+		}
+
+		if !regexp.MustCompile(os.Getenv("INPUT_DESCRIPTION_REGEXP")).Match([]byte(prDescription)) {
+			Log.Info("description validation failed")
+			os.Exit(103)
+		}
 	},
 }
 
@@ -66,34 +112,6 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.conventional-commit.yaml)")
+	Log = slog.New(slog.NewTextHandler(os.Stdout))
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-}
-
-// initConfig reads in config file and ENV variables if set.
-func initConfig() {
-	if cfgFile != "" {
-		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
-	} else {
-		// Find home directory.
-		home, err := os.UserHomeDir()
-		cobra.CheckErr(err)
-
-		viper.AddConfigPath(home)
-		viper.AddConfigPath("./")
-		viper.SetConfigType("yaml")
-		viper.SetConfigName(".conventional-commit")
-	}
-
-	viper.SetDefault("TYPES", `build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test`)
-	viper.SetDefault("DESCRIPTION", `([\w ]+)`)
-
-	viper.AutomaticEnv() // read in environment variables that match
-
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
-	}
 }
