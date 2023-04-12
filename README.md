@@ -16,8 +16,6 @@ jobs:
     steps:
       - name: Validate PR title
         uses: lab42/conventional-commit@main
-        env:
-            GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
 ```
 
@@ -40,8 +38,24 @@ jobs:
     steps:
       - name: Validate PR title
         uses: lab42/conventional-commit@main
-        env:
-            GITHUB_TOKEN: ${{ secrets.TOKEN }}
-            TYPES: feat|fix
-            DESCRIPTION: \[([\w])-(\d{1,4})\] ([\w ]+) # Example for requiring Jira issue number before description.
+        with:
+          # Allowed commit types
+          allowed_types: |
+              build
+              chore
+              ci
+              docs
+              feat
+              fix
+              perf
+              refactor
+              revert
+              style
+              test
+          # Regular expression to validate description
+          description_regexp: ([\w ]+)
+          # Make scope requires (boolean)
+          require_scope: "false"
+          # Regular expression to validate scope. Only used when require_scope is true or when scope is provided.
+          scope_regexp: (\w+)
 ```
