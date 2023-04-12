@@ -11,7 +11,6 @@ import (
 	"github.com/google/go-github/github"
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"golang.org/x/exp/slog"
 	"golang.org/x/oauth2"
 )
@@ -22,23 +21,6 @@ var rootCmd = &cobra.Command{
 	Use:   "conventional-commit",
 	Short: "A brief description of your application",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf(`
-Configuration
-
-Allowed Types
-%s
-Description Regexp 
-\t%s
-Require scope 
-\t%t
-Scope Regexp 
-\t%s`,
-			strings.ReplaceAll(os.Getenv("INPUT_ALLOWED_TYPES"), "\n", "\n\t"),
-			os.Getenv("INPUT_DESCRIPTION_REGEXP"),
-			viper.GetBool("INPUT_REQUIRE_SCOPE"),
-			os.Getenv("INPUT_SCOPE_REGEXP"),
-		)
-
 		meta := strings.Split(os.Getenv("GITHUB_REPOSITORY"), "/")
 		owner, repo := meta[0], meta[1]
 

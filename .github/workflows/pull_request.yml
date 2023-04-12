@@ -11,5 +11,3 @@ jobs:
         uses: lab42/conventional-commit@main
         with:
           description_regexp: (.*)
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
