@@ -25,6 +25,9 @@ inputs:
   scope_regexp:
     description: Regular expression to validate scope. Only used when require_scope is true or when scope is provided.
     default: (\w+)
+  gh_token:
+    description: Github API token
+    default: ${{ secrets.GITHUB_TOKEN }}
 runs:
   using: "docker"
   image: "docker://ghcr.io/lab42/conventional-commit:latest"

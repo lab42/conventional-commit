@@ -31,7 +31,7 @@ var rootCmd = &cobra.Command{
 		ctx := context.Background()
 
 		ts := oauth2.StaticTokenSource(
-			&oauth2.Token{AccessToken: os.Getenv("GITHUB_TOKEN")},
+			&oauth2.Token{AccessToken: os.Getenv("INPUT_GH_TOKEN")},
 		)
 
 		tc := oauth2.NewClient(ctx, ts)
